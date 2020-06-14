@@ -20,8 +20,9 @@ func myfunc() string {
 		name = "python"
 	}()
 
-	fmt.Printf("myfunc 函数里的name：%s\n", name)
-	return name
+	fmt.Printf("myfunc 函数里的name：%s\n", name)//go
+	//无名返回值
+	return name  //go
 }
 
 func main() {
