@@ -12,7 +12,7 @@ func HigherFunction(v int, f F) int {
 }
 
 //调用高阶函数
-func main() {
+func main2() {
 	//声明函数1
 	var f1 F
 	f1 = func(i int) int {
