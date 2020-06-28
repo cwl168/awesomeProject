@@ -1,9 +1,9 @@
 package main
 
 import (
-	"../pipeline"
 	"bufio"
 	"fmt"
+	"learnDemo/pipeline"
 	"os"
 	"strconv"
 )
