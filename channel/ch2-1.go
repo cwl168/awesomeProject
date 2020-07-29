@@ -9,6 +9,7 @@ import (
 //goroutine 泄露
 func counter2(in chan<- int, st <-chan struct{}) {
 	for i := 0; ; i++ {
+		//select监听信道
 		select {
 		case in <- i:
 			fmt.Printf("push to ch %d\n", i)
@@ -30,8 +31,8 @@ func main() {
 	for i := 0; i < 3; i++ {
 		fmt.Printf(" %d\n", <-ch)
 	}
-	//close(done)
-	done <- struct{}{}
+	close(done)
+	//done <- struct{}{}
 
 }
 
