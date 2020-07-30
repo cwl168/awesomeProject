@@ -32,7 +32,8 @@ func main() {
 			fmt.Println(num)
 		}
 		//可以停止
-		quit <- true
+		//quit <- true
+		close(quit)
 	}() //别忘了()
 
 	//生产者，产生数字，写入channel
