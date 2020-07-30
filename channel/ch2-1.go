@@ -31,6 +31,7 @@ func main() {
 	for i := 0; i < 3; i++ {
 		fmt.Printf(" %d\n", <-ch)
 	}
+	fmt.Println("close done")
 	close(done)
 	//done <- struct{}{}
 
