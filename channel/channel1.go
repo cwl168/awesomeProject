@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"os"
+)
+
 //var ch9 = make(chan int)
 var ch9 = make(chan map[int]int)
 
@@ -11,7 +16,12 @@ func mm2() {
 	}
 }
 func main() {
-	ch:=make(chan int)
+	in, err := os.Open("infile")
+	out, err := os.Create("outfile")
+	fmt.Println(in)
+	fmt.Println(out)
+	fmt.Println(err)
+	ch := make(chan int)
 	<-ch
 	//go mm2()
 	//for v:=range ch9{
