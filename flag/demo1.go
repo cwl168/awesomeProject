@@ -18,6 +18,7 @@ var (
 	p string
 	c string
 	g string
+	i int
 )
 
 func init() {
@@ -37,6 +38,13 @@ func init() {
 	flag.StringVar(&p, "p", "/usr/local/nginx/", "set `prefix` path")
 	flag.StringVar(&c, "c", "conf/nginx.conf", "set configuration `file`")
 	flag.StringVar(&g, "g", "conf/nginx.conf", "set global `directives` out of configuration file")
+
+	var ip = flag.Int("flagname", 1234, "help message for flagname")
+	//返回的ip是指针类型i
+	fmt.Println(*ip)
+	//将 flag 绑定到一个变量上
+	flag.IntVar(&i, "flagname2", 1234, "help message for flagname")
+	fmt.Println(i)
 
 	// 改变默认的 Usage，flag包中的Usage 其实是一个函数类型。这里是覆盖默认函数实现，具体见后面Usage部分的分析
 	flag.Usage = usage
