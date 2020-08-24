@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
+	a := 1
+	fmt.Println(fmt.Sprintln(a))
 	resp := `{"code": "00",
               "message": "SUCCESS",
               "describe": "成功",
