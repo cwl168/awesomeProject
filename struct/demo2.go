@@ -23,7 +23,7 @@ func main() {
 		Age:  19,
 	}
 
-	stuByts1, _ := json.Marshal(&stu1)
+	stuByts1, _ := json.Marshal(&stu1) //转化为json串
 
 	stuByts2, _ := json.Marshal(&stu2)
 
