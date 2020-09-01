@@ -16,7 +16,8 @@ func main() {
         "Test"
     ],
     "isok": true,
-    "price": 666.666
+    "price": 666.666,
+    "tttt":4 
 }`)
 
 	var t interface{}
@@ -52,12 +53,12 @@ func main() {
 		Name string
 	}
 
-	var people = Human{Name:"zhangsan"}
+	var people = Human{Name: "zhangsan"}
 	fmt.Println(people)
-	fmt.Printf("%v\n",people)
-	fmt.Printf("%+v\n",people)
-	fmt.Printf("%#v\n",people)
-	fmt.Printf("%T\n",people)
+	fmt.Printf("%v\n", people)
+	fmt.Printf("%+v\n", people)
+	fmt.Printf("%#v\n", people)
+	fmt.Printf("%T\n", people)
 
 	var d rune = 'a'
 	var e byte = 255
@@ -65,7 +66,6 @@ func main() {
 	fmt.Println(d)
 	fmt.Println(e)
 	fmt.Println(f)
-
 
 	var data [10]byte
 	data[0] = 'A'
