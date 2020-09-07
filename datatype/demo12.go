@@ -29,4 +29,12 @@ func main() {
 		e
 	)
 	fmt.Println(a, b, c, d, e)
+	const (
+		f = 1 << iota
+		g
+		h
+		i
+		k
+	)
+	fmt.Println(f, g, h, i, k)
 }
