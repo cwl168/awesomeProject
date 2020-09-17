@@ -8,10 +8,10 @@ import (
 )
 
 type Computer struct {
-	Cpu       string    `json:"cup"`
-	Ram       int       `json:"ram"`
-	Rom       int       `json:"rom"`
-	CreatedAt time.Time `json:"created_at"`
+	Cpu       string `json:"cup"`
+	Ram       int    `json:"ram"`
+	Rom       int    `json:"rom"`
+	CreatedAt string `json:"created_at"`
 }
 
 /*type Computer struct {
@@ -21,7 +21,8 @@ type Computer struct {
 }*/
 
 func main() {
-	hp := &Computer{"i7", 2, 250} //{"cup":"i7","ram":2,"rom":250}
+
+	hp := &Computer{"i7", 2, 250, time.Now().Format(time.RFC3339)} //{"cup":"i7","ram":2,"rom":250}
 
 	res, err := json.Marshal(hp)
 	if err == nil {
