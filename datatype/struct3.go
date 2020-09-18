@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -21,6 +22,8 @@ type Computer struct {
 }*/
 
 func main() {
+	str := "Hello World"
+	fmt.Println(strings.Count(str, "")) //程序输出 1
 
 	hp := &Computer{"i7", 2, 250, time.Now().Format(time.RFC3339)} //{"cup":"i7","ram":2,"rom":250}
 
