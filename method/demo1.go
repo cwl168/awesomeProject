@@ -3,6 +3,7 @@ package main
 import "fmt"
 
 type MyInt int
+
 func (a MyInt) Add(b MyInt) MyInt { //面向对象
 	return a + b
 }
