@@ -2,6 +2,10 @@ package person
 
 import "fmt"
 
+type Test struct {
+	Name string
+}
+
 //定义不能导出的结构体
 type person struct {
 	Name string
