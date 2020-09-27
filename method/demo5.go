@@ -24,7 +24,13 @@ func (p Person) PrintInfoValue() {
 	fmt.Printf("%p, %v\n", &p, p)
 }
 
+const s = "Go101.org"
+
+var a byte = 1 << len(s) / 128
+var b byte = 1 << len(s[:]) / 128
+
 func main() {
+	println(len(s), len(s[:]), a, b)
 	//直接调用
 	p := Person{"ck_god", 'm', 18}
 	p.PrintInfoPointer()
