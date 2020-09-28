@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"learnDemo/method/person"
 )
 
+//只能对命名类型添加方法
 func (c *int) Write(p []byte) (int, error) {
 	*c += len(p)
 	return len(p), nil

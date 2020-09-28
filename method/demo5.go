@@ -24,12 +24,14 @@ func (p Person) PrintInfoValue() {
 	fmt.Printf("%p, %v\n", &p, p)
 }
 
-const s = "Go101.org"
+const s = "Go101.org" //4 0
+//var s = "Go101.org"  //0 0
 
 var a byte = 1 << len(s) / 128
 var b byte = 1 << len(s[:]) / 128
 
 func main() {
+	fmt.Printf("%T  %T \n", 1<<len(s), 1<<len(s[:]))
 	println(len(s), len(s[:]), a, b)
 	//直接调用
 	p := Person{"ck_god", 'm', 18}
