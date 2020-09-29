@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
+	"os"
 )
 
 // 定义一个接口
@@ -25,12 +28,27 @@ func CheckPeople(test interface{}) {
 	}
 }
 func main() {
-	cbs := Student{Name: "咖啡色的羊驼"}
-	CheckPeople(cbs) // Student implements People
-	var a People
+	stu := Student{Name: "咖啡色的羊驼"}
+	CheckPeople(stu) // Student implements People
+	var peo People
 	// 因为Students实现了接口所以直接赋值没问题
 	// 如果没实现会报错：cannot use cbs (type Student) as type People in assignment:Student does not implement People (missing ReturnName method)
-	a = cbs
-	name := a.ReturnName()
+	peo = stu //因为Students实现了接口所以直接赋值没问题
+	name := peo.ReturnName()
 	fmt.Println(name) // 输出"咖啡色的羊驼"
+
+	var w io.Writer
+	w = os.Stdout
+	w = new(bytes.Buffer)
+	//w = time.Second
+	fmt.Println(w)
+
+	var rwc io.ReadWriteCloser
+	rwc = os.Stdout
+	//rwc = new(bytes.Buffer)
+
+	w = rwc
+	//rwc = w
+
+	fmt.Println(rwc)
 }
