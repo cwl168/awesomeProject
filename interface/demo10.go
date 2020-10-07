@@ -22,8 +22,10 @@ func main() {
 	w = nil
 	fmt.Println(w)
 
-	var buf *bytes.Buffer
-	test(buf)
+	os.Stdout.Write([]byte("hello"))
+
+	/*var buf *bytes.Buffer
+	test(buf)*/
 }
 func test(w io.Writer) {
 	fmt.Printf("%T\n", w)
