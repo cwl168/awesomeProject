@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -16,13 +17,25 @@ func main() {
 	} else {
 		fmt.Println("不空")
 	}
-	w = os.Stdout         //动态类型被设 为*os.Stdout指针的类型描述符，它的动态值持有os.Stdout的拷贝；
-	w = new(bytes.Buffer) //动态类型是*bytes.Buffer,动态值是一个指向新分配的缓冲区的指针
-	fmt.Printf("%T\n", w) // 打印动态类型
+	fmt.Printf("main1 %T,%v\n", w, w)
+	w = os.Stdout //动态类型被设 为*os.Stdout指针的类型描述符，它的动态值持有os.Stdout的拷贝；
+	fmt.Printf("main2 %T,%v\n", w, w)
+	w = new(bytes.Buffer)             //动态类型是*bytes.Buffer,动态值是一个指向新分配的缓冲区的指针
+	fmt.Printf("main3 %T,%v\n", w, w) // 打印动态类型
 	w = nil
-	fmt.Println(w)
+	fmt.Printf("main4 %T,%v\n", w, w)
 
 	os.Stdout.Write([]byte("hello"))
+	fmt.Println()
+
+	w1 := errors.New("ERR")
+	w2 := errors.New("ERR")
+	fmt.Printf("main5 %T,%v\n", w1, w1)
+	fmt.Println(w1 == w2) // 输出false
+
+	var x interface{} = []int{1, 2, 3}
+	fmt.Printf("main5 %T,%v\n", x, x)
+	fmt.Println(x == x)
 
 	/*var buf *bytes.Buffer
 	test(buf)*/
