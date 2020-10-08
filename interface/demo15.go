@@ -9,8 +9,11 @@ import (
 const debug = false
 
 func main() {
-	var buf *bytes.Buffer
+	//var buf os.File
+	//buf.Write([]byte("done!\n"))
 	//var buf io.Writer
+	var buf *bytes.Buffer
+	fmt.Printf("f %T,%v\n", buf, buf)
 	if debug {
 		buf = new(bytes.Buffer) // enable collection of output
 	}
