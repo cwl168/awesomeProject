@@ -51,6 +51,7 @@ func main() {
 	pFunc3()
 
 	pFunc4 := p.PrintInfoValue
+	fmt.Println(pFunc4)
 	pFunc4()
 	fmt.Println("---------------\n")
 
