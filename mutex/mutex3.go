@@ -11,9 +11,9 @@ var sema = make(chan struct{}, 1)
 
 // 存钱
 func Deposit(amount int) {
-	sema <- struct{}{}
+	//sema <- struct{}{}
 	balance = balance + amount
-	<-sema
+	//<-sema
 }
 
 // 查看余额
@@ -21,12 +21,12 @@ func Balance() int {
 	return balance
 }
 func alice(amount int) {
-	//fmt.Printf("Alice deposit $%d\n", amount)
+	fmt.Printf("Alice deposit $%d\n", amount)
 	Deposit(amount)
 }
 
 func bob(amount int) {
-	//fmt.Printf("Bob deposit $%d\n", amount)
+	fmt.Printf("Bob deposit $%d\n", amount)
 	Deposit(amount)
 }
 func main() {
