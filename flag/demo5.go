@@ -8,6 +8,7 @@ import (
 //go run flag/demo5.go go -name=as
 var name string
 
+//子命令
 func main() {
 	flag.Parse()
 	goCmd := flag.NewFlagSet("go", flag.ExitOnError)
