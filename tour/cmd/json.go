@@ -29,6 +29,14 @@ var json2structCmd = &cobra.Command{
 	},
 }
 
+//go run tour/main.go json struct --str="{\"code\":200,\"data\":{\"lists\":[{\"id\":9,\"created_on\":1595557131,\"modified_on\":1595557131,\"deleted_on\":0,\"name\":\"游戏\",\"created_by\":\"123\",\"modified_by\":\"\",\"state\":1}],\"total\":1},\"msg\":\"ok\"}"
+/**
+2020/11/03 18:54:07 输出结果: type Tour struct {
+    Code float64
+    Data map[string]interface {}
+    Msg string
+}
+*/
 func init() {
 	jsonCmd.AddCommand(json2structCmd)
 	json2structCmd.Flags().StringVarP(&str, "str", "s", "", "请输入json字符串")
