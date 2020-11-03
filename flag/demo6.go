@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-//go run flag/demo5.go go -name=as
+//go run flag/demo6.go -name=php
 type Name string
 
 func (i *Name) String() string { return fmt.Sprint(*i) }
