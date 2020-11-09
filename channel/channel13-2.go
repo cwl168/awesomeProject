@@ -13,6 +13,7 @@ func main() {
 	wg.Add(1)
 	go consume(done, &wg)
 	wg.Wait()
+	fmt.Println("end")
 }
 func produce(done chan<- int, wg *sync.WaitGroup) {
 	for i := 0; i < 5; i++ {
