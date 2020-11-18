@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -26,8 +27,12 @@ type entry struct {
 }
 
 func main() {
-	errors := make(chan error, 2)
-	entries := make(chan entry, 2)
+	defer func() {
+		time.Sleep(5 * time.Second)
+		fmt.Println("the number of goroutines: ", runtime.NumGoroutine())
+	}()
+	errors := make(chan error)
+	entries := make(chan entry)
 	var n sync.WaitGroup
 
 	n.Add(1)
@@ -46,18 +51,21 @@ loop:
 		select {
 		case err := <-errors:
 			fmt.Printf("%v\n", err)
+			//排空  entries通道
+			for range entries {
+
+			}
 			close(abort)
 		case item, ok := <-entries:
 			if !ok {
+				fmt.Println("xxxxx")
 				break loop
 			}
 			fmt.Printf("%d\t%s\n", item.nbytes, item.url)
 		}
 	}
-
 	fmt.Println("end")
 }
-
 func getBaidu(n *sync.WaitGroup, item chan<- entry, outErr chan<- error) {
 	defer n.Done()
 	time.Sleep(3 * time.Second)
@@ -94,7 +102,7 @@ func getOther(n *sync.WaitGroup, item chan<- entry, outErr chan<- error) {
 		fmt.Println("other cancelled")
 		return
 	}
-	url := "https://www.baidu.com"
+	url := "https://www.sina.com.cn"
 	resp, err := http.Get(url)
 	if err != nil {
 		outErr <- fmt.Errorf("fetch url err: %v", err)
