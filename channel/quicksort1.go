@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//左边比哨兵小，右边比哨兵大，并返回最终哨兵的位置
 func partition(a []int, low, high int) int {
 	item := a[high]
 	i := low - 1
@@ -17,7 +18,7 @@ func partition(a []int, low, high int) int {
 			a[j], a[i] = a[i], a[j]
 		}
 	}
-
+	//交换 处理哨兵
 	a[i+1], a[high] = a[high], a[i+1]
 	return i + 1
 }
@@ -32,11 +33,12 @@ func quickSort(a []int, low, high int) {
 	quickSort(a, p+1, high)
 }
 
-func goQuickSort(a []int, low, high int, done chan struct{}, depth int) {
+func goQuickSort(a []int, low, high int, cdone chan struct{}, depth int) {
 	if low >= high {
-		done <- struct{}{}
+		cdone <- struct{}{}
 		return
 	}
+	//控制goroutine数量
 	depth--
 	p := partition(a, low, high)
 	if depth > 0 {
@@ -50,11 +52,13 @@ func goQuickSort(a []int, low, high int, done chan struct{}, depth int) {
 		quickSort(a, low, p-1)
 		quickSort(a, p+1, high)
 	}
-
-	done <- struct{}{}
+	//排序完成 通知主groutinue
+	mdone <- struct{}{}
 }
 
-const num = 100000
+const num = 1000000
+
+var mdone = make(chan struct{})
 
 func main() {
 	defer func() {
@@ -63,23 +67,24 @@ func main() {
 	}()
 	rand.Seed(time.Now().UnixNano())
 	slice1, slice2 := make([]int, 0, num), make([]int, 0, num)
-	for i := 0; i < num; i++ {
+	/*for i := 0; i < num; i++ {
 		val := rand.Intn(1000)
 		slice1 = append(slice1, val)
 		slice2 = append(slice2, val)
-	}
+	}*/
+	slice1 = []int{7, 3, 9, 4, 6}
+	slice2 = []int{7, 3, 9, 4, 6}
 	start := time.Now()
 	quickSort(slice1, 0, len(slice1)-1)
 	fmt.Println("非并发版: ", time.Now().Sub(start))
-
 	if !sort.IntsAreSorted(slice1) {
 		fmt.Println("非有序")
 	}
+	fmt.Println(slice1)
 
-	done := make(chan struct{})
 	start = time.Now()
-	go goQuickSort(slice2, 0, len(slice2)-1, done, 10)
-	<-done
+	go goQuickSort(slice2, 0, len(slice2)-1, mdone, 1)
+	<-mdone
 	fmt.Println("并发版: ", time.Now().Sub(start))
 	if !sort.IntsAreSorted(slice2) {
 		fmt.Println("非有序")
