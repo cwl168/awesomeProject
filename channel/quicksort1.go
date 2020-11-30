@@ -72,8 +72,8 @@ func main() {
 		slice1 = append(slice1, val)
 		slice2 = append(slice2, val)
 	}*/
-	slice1 = []int{7, 3, 9, 4, 6}
-	slice2 = []int{7, 3, 9, 4, 6}
+	slice1 = []int{5, 9, 1, 6, 8, 14, 6, 49, 25, 4, 6, 3}
+	slice2 = []int{5, 9, 1, 6, 8, 14, 6, 49, 25, 4, 6, 3}
 	start := time.Now()
 	quickSort(slice1, 0, len(slice1)-1)
 	fmt.Println("非并发版: ", time.Now().Sub(start))

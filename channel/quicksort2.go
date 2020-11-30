@@ -15,7 +15,7 @@ func main() {
 		time.Sleep(time.Second)
 		fmt.Println("the number of goroutines: ", runtime.NumGoroutine())
 	}()
-	arr := []int{7, 3, 9, 4, 6}
+	arr := []int{5, 9, 1, 6, 8, 14, 6, 49, 25, 4, 6, 3}
 	/*arr := make([]int, 0, num)
 	for i := 0; i < num; i++ {
 		val, _ := rand.Int(rand.Reader, big.NewInt(1000))
@@ -39,12 +39,36 @@ func quickSort(values []int, wg *sync.WaitGroup) {
 		wg.Done()
 		return
 	}
+	h := len(values) - 1
+	pivotIndex := 0
+	pivot := values[h]
+	storeIndex := pivotIndex - 1
+	for i := pivotIndex; i < len(values); i++ {
+		if values[i] < pivot {
+			storeIndex++
+			values[i], values[storeIndex] = values[storeIndex], values[i]
+		}
+	}
+	values[h], values[storeIndex+1] = values[storeIndex+1], values[h]
+
+	wg.Add(2)
+	go quickSort(values[0:storeIndex+1], wg)
+	go quickSort(values[storeIndex+2:], wg)
+	wg.Done()
+}
+
+/*func quickSort2(values []int) {
+	if len(values) <= 1 {
+		return
+	}
 	pivotIndex := 0
 	pivot := values[pivotIndex]
 	storeIndex := pivotIndex + 1
 	for i := pivotIndex + 1; i < len(values); i++ {
+		count1++
 		if values[i] < pivot {
 			if i != storeIndex {
+				count2++
 				values[i], values[storeIndex] = values[storeIndex], values[i]
 			}
 			storeIndex++
@@ -52,8 +76,6 @@ func quickSort(values []int, wg *sync.WaitGroup) {
 	}
 	values[pivotIndex], values[storeIndex-1] = values[storeIndex-1], values[pivotIndex]
 
-	wg.Add(2)
-	go quickSort(values[0:storeIndex-1], wg)
-	go quickSort(values[storeIndex:], wg)
-	wg.Done()
-}
+	quickSort(values[0 : storeIndex-1])
+	quickSort(values[storeIndex:])
+}*/
