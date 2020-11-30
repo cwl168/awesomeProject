@@ -1,10 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
-	"github.com/spf13/viper"
+	"log"
 )
 
 func main() {
@@ -19,8 +18,20 @@ func main() {
 				if !ok {
 					return
 				}
-				l
+				log.Println("event:", event)
+				if event.Op&fsnotify.Write == fsnotify.Write {
+					log.Println("modified file:", event.Name)
+				}
+			case err, ok := <-watch.Errors:
+				if !ok {
+					return
+				}
+				log.Println("error:", err)
+
 			}
 		}
 	}()
+	//填写要监听的目录或者文件
+	_ = watch.Add("/Users/caoweilin/go/src/learnDemo/viper/config.yaml")
+	fmt.Println(<-done)
 }

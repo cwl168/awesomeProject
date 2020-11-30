@@ -4,7 +4,7 @@ Postcode: 518000
 CompanyInfomation:
   Name: "Sunny"
   MarketCapitalization: 50000
-  EmployeeNum: 200
+  EmployeeNum: 300
   Department:
     - "Finance"
     - "Design"
