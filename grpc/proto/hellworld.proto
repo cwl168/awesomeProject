@@ -1,0 +1,20 @@
+syntax = "proto3"; // proto版本
+package hellworld; // 指定包名，默认go中包名也是这个
+option go_package = "hellworld";
+// 定义服务
+service Love {
+  rpc SayHello(HelloRequest) returns (HelloResponse) {}
+}
+
+// 请求
+message HelloRequest {
+  string name = 1;
+}
+
+// 响应
+message HelloResponse {
+  string result = 1;
+}
+
+
+//protoc --go_out=plugins=grpc:. ./love.proto
