@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"time"
 )
 
 func main() {
@@ -33,7 +34,6 @@ func main() {
 	v.WatchConfig()
 	//信道不会主动关闭，可以主动调用cancel关闭
 	<-ctx.Done()
-
 	fmt.Printf(
 		`
 		TimeStamp:%s
@@ -60,6 +60,7 @@ type CompanyInfomation struct {
 	EmployeeNum          int64
 	Department           []interface{}
 	IsOpen               bool
+	Time                 time.Duration
 }
 
 type YamlSetting struct {
@@ -74,6 +75,8 @@ func parseYaml(v *viper.Viper) {
 	if err := v.Unmarshal(&yamlObj); err != nil {
 		fmt.Printf("err:%s", err)
 	}
+	dtime := yamlObj.CompanyInfomation.Time
+	fmt.Printf("Time [%v],[%d],[%T]\n", dtime, dtime, dtime)
 	fmt.Println(yamlObj)
 	/*
 		result:

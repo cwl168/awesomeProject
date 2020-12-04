@@ -1,14 +1,15 @@
 TimeStamp: "2018-10-18 10:09:23"
 Address: "Shenzhen"
-Postcode: 518000
+Postcode: 51804
 CompanyInfomation:
   Name: "Sunny"
   MarketCapitalization: 50000
-  EmployeeNum: 300
+  EmployeeNum: 500
   Department:
     - "Finance"
     - "Design"
     - "Program"
     - "Sales"
   IsOpen: false
+  Time: 1m30s
 
