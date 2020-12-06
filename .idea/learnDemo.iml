@@ -8,6 +8,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$/../grpc-demo" />
     <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$/../grpc-demo" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
