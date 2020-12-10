@@ -1,16 +1,16 @@
 package main
 
 import (
-	"log"
-	"net/http"
+	"fmt"
 	_ "net/http/pprof"
+	"time"
 )
 
 func main() {
-
-	go func() {
+	fmt.Println(time.Now().Format("2006-01-02"))
+	/*go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
 
-	select {}
+	select {}*/
 }
