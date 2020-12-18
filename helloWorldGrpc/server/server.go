@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
 	pb "learnDemo/helloWorldGrpc/proto"
 	"log"
@@ -15,6 +17,27 @@ type server struct {
 
 // 实现server服务接口
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+	//利用函数 FromIncomingContext从context中获取metadata:
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, grpc.Errorf(codes.Unauthenticated, "无Token认证信息")
+	}
+	//time.Sleep(2*time.Second)
+	var (
+		appid  string
+		appkey string
+	)
+	if val, ok := md["appid"]; ok {
+		appid = val[0]
+	}
+	if val, ok := md["appkey"]; ok {
+		appkey = val[0]
+	}
+	if appid != "101010" || appkey != "i am key" {
+		return nil, grpc.Errorf(codes.Unauthenticated, "Token认证信息无效: appid=%s, appkey=%s", appid, appkey)
+	}
+	log.Printf("Received: %v.\nToken info: appid=%s,appkey=%s", in.GetName(), appid, appkey)
+
 	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
 }
 
