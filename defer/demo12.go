@@ -11,9 +11,11 @@ func Try(fun func(), handler func(interface{})) {
 }
 
 func main() {
-	Try(func() {
-		panic("foo")
-	}, func(e interface{}) {
-		print("finally")
-	})
+	Try(
+		func() {
+			panic("foo")
+		},
+		func(e interface{}) {
+			print("finally")
+		})
 }
