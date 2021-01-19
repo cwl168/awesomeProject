@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 var slice []func()
 
@@ -17,4 +20,7 @@ func main() {
 	for _, val := range slice {
 		val()
 	}
+	//a, b := 3, 2
+	c := 1.2
+	fmt.Println(math.Ceil(c))
 }
