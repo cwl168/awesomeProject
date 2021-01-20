@@ -5,21 +5,23 @@ import (
 	"log"
 )
 
-func main() {
-	i := 0
-	c := cron.New(cron.WithSeconds())
-	spec := "0/5 * * * * ?"
-	c.AddFunc(spec, func() {
-		i++
-		log.Println("cron running:", i)
-	})
-	c.Start()
+var db int
 
+func main() {
+	c := cron.New(cron.WithSeconds())
+	c.AddFunc("0/5 * * * * ?", print5)
+	c.AddFunc("*/15 * * * * ?", print15)
+	c.Start()
+	println(db)
 	select {}
 }
 func print5() {
+	db = 5
 	log.Println("Run 5s cron")
+	println(db)
 }
 func print15() {
+	db = 15
 	log.Println("Run 15s cron")
+	println(db)
 }
