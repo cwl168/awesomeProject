@@ -11,8 +11,8 @@ import (
 )
 
 func main() {
-	//imgUrl := "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=O38GA2SviPLnqfF5&suffix=tar.gz"
-	downFileUrl := "https://codeload.github.com/aequitas/macos-menubar-wireguard/tar.gz/1.24"
+	downFileUrl := "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=O38GA2SviPLnqfF5&suffix=tar.gz"
+	//downFileUrl := "https://codeload.github.com/aequitas/macos-menubar-wireguard/tar.gz/1.24"
 	// Get the data
 	resp, err := http.Get(downFileUrl)
 	if err != nil {
