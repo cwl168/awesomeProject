@@ -51,8 +51,9 @@ func OriginalFrequency(s string) FreqMap {
 
 func TestConcurrentFrequency(t *testing.T) {
 	seq := OriginalFrequency(euro + dutch + us)
-	fmt.Println(seq)
+	//并发执行
 	con := ConcurrentFrequency([]string{euro, dutch, us})
+	fmt.Println(con)
 	if !reflect.DeepEqual(con, seq) {
 		t.Fatal("ConcurrentFrequency wrong result")
 	}
@@ -60,18 +61,27 @@ func TestConcurrentFrequency(t *testing.T) {
 
 func TestSequentialFrequency(t *testing.T) {
 	oSeq := OriginalFrequency(euro + dutch + us)
+	//顺序执行
 	seq := Frequency(euro + dutch + us)
 	if !reflect.DeepEqual(oSeq, seq) {
 		t.Fatal("Frequency wrong result")
 	}
 }
 
+//顺序执行 性能测试
+//goos: darwin
+//goarch: amd64
+//pkg: learnDemo/letter
+//BenchmarkSequentialFrequency
+//BenchmarkSequentialFrequency-8   	   42166	     27467 ns/op
+//PASS
 func BenchmarkSequentialFrequency(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Frequency(euro + dutch + us)
 	}
 }
 
+//并发执行 性能测试
 func BenchmarkConcurrentFrequency(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		ConcurrentFrequency([]string{euro, dutch, us})
