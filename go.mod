@@ -11,6 +11,7 @@ require (
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/go-programming-tour-book/tour v0.0.0-20200725090022-7a9f824862e3
 	github.com/go-sql-driver/mysql v1.4.1
+	github.com/goinaction/code v0.0.0-20171020164608-49fc99e6affb // indirect
 	github.com/golang/protobuf v1.4.1
 	github.com/google/uuid v1.1.2 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible // indirect
