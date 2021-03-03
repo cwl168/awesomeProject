@@ -21,6 +21,29 @@ func Frequency(s string) FreqMap {
 // 我们可以用一个有容量限制的buffered channel来控制并发，这类似于操作系统里的计数信号量概念。
 var sema = make(chan struct{}, 10)
 
+func ConcurrentFrequency4(s []string) FreqMap {
+	var (
+		result  = FreqMap{}
+		channel = make(chan FreqMap, len(s))
+	)
+
+	for _, v := range s {
+		sema <- struct{}{}
+		go func(text string) {
+			defer func() { <-sema }()
+			channel <- Frequency(text)
+		}(v)
+	}
+
+	for range s {
+		for k, v := range <-channel {
+			result[k] += v
+		}
+	}
+
+	return result
+}
+
 //没有限制goroutine
 func ConcurrentFrequency3(s []string) FreqMap {
 	var (
@@ -70,6 +93,7 @@ func ConcurrentFrequency2(s []string) FreqMap {
 
 	return result
 }
+
 func ConcurrentFrequency1(s []string) FreqMap {
 	var wg sync.WaitGroup
 	wg.Add(len(s))
@@ -90,7 +114,7 @@ func ConcurrentFrequency1(s []string) FreqMap {
 		wg.Wait()
 		close(channel)
 	}()
-
+	//channel 为buffer channel,所以会出现 channel关闭后，for range 还在循环从channe读取数据，但是channel数据长度肯定是 小于等于 len(s)
 	for range s {
 		for k, v := range <-channel {
 			result[k] += v
@@ -99,10 +123,33 @@ func ConcurrentFrequency1(s []string) FreqMap {
 
 	return result
 }
+
+//无缓冲通道
+func ConcurrentFrequency5(s []string) FreqMap {
+	var (
+		result  = FreqMap{}
+		channel = make(chan FreqMap)
+	)
+
+	for _, v := range s {
+		go func(text string) {
+			channel <- Frequency(text)
+		}(v)
+	}
+
+	for range s {
+		for k, v := range <-channel {
+			result[k] += v
+		}
+	}
+	close(channel)
+
+	return result
+}
 func main() {
 	defer func() {
 		time.Sleep(time.Second)
-		fmt.Println("the number of goroutines: ", runtime.NumGoroutine())
+		fmt.Println("\nthe number of goroutines: ", runtime.NumGoroutine())
 	}()
 
 	var (
@@ -135,19 +182,35 @@ O'er the land of the free and the home of the brave?`
 	)
 	//方法一
 	start := time.Now()
-	_ = ConcurrentFrequency1([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch,us, dutch, dutch, us, dutch, euro, dutch, us, dutch,euro, dutch, us, dutch})
+	_ = ConcurrentFrequency1([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
 	cost := time.Since(start)
 	fmt.Printf("ConcurrentFrequency1 cost=[%s]\n", cost)
 
 	//方法二
 	start2 := time.Now()
-	_ = ConcurrentFrequency2([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch,us, dutch, dutch, us, dutch, euro, dutch, us, dutch,euro, dutch, us, dutch})
+	_ = ConcurrentFrequency2([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
 	cost2 := time.Since(start2)
 	fmt.Printf("ConcurrentFrequency2 cost=[%s]\n", cost2)
 
 	//方法三
 	start3 := time.Now()
-	_ = ConcurrentFrequency3([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch,us, dutch, dutch, us, dutch, euro, dutch, us, dutch,euro, dutch, us, dutch})
+	_ = ConcurrentFrequency3([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
 	cost3 := time.Since(start3)
 	fmt.Printf("ConcurrentFrequency3 cost=[%s]\n", cost3)
+
+	//方法四
+	start4 := time.Now()
+	ret := ConcurrentFrequency4([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
+	cost4 := time.Since(start4)
+	fmt.Printf("ConcurrentFrequency4 cost=[%s]\n", cost4)
+
+	//方法五
+	start5 := time.Now()
+	_ = ConcurrentFrequency5([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
+	cost5 := time.Since(start5)
+	fmt.Printf("ConcurrentFrequency5 cost=[%s]\n", cost5)
+
+	for k, v := range ret {
+		fmt.Printf("%v:%v\t", string(k), v)
+	}
 }
