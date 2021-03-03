@@ -83,10 +83,11 @@ func ConcurrentFrequency2(s []string) FreqMap {
 		}(v)
 	}
 	wg.Wait()
-	close(channel)
-
-	for k, v := range <-channel {
-		result[k] += v
+	//close(channel)
+	for range s {
+		for k, v := range <-channel {
+			result[k] += v
+		}
 	}
 
 	return result
@@ -212,7 +213,7 @@ O'er the land of the free and the home of the brave?`
 
 	//方法二
 	start2 := time.Now()
-	_ = ConcurrentFrequency2([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
+	ret2 := ConcurrentFrequency2([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
 	cost2 := time.Since(start2)
 	fmt.Printf("ConcurrentFrequency2 cost=[%s]\n", cost2)
 
@@ -224,7 +225,7 @@ O'er the land of the free and the home of the brave?`
 
 	//方法四
 	start4 := time.Now()
-	ret := ConcurrentFrequency4([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
+	ret4 := ConcurrentFrequency4([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
 	cost4 := time.Since(start4)
 	fmt.Printf("ConcurrentFrequency4 cost=[%s]\n", cost4)
 
@@ -234,13 +235,18 @@ O'er the land of the free and the home of the brave?`
 	cost5 := time.Since(start5)
 	fmt.Printf("ConcurrentFrequency5 cost=[%s]\n", cost5)
 
-	//方法6
-	start6 := time.Now()
-	_ = ConcurrentFrequency6([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
-	cost6 := time.Since(start6)
-	fmt.Printf("ConcurrentFrequency6 cost=[%s]\n", cost6)
+	////方法6
+	//start6 := time.Now()
+	//_ = ConcurrentFrequency6([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
+	//cost6 := time.Since(start6)
+	//fmt.Printf("ConcurrentFrequency6 cost=[%s]\n", cost6)
 
-	for k, v := range ret {
+	for k, v := range ret4 {
+		fmt.Printf("%v:%v\t", string(k), v)
+	}
+	fmt.Println()
+	fmt.Println()
+	for k, v := range ret2 {
 		fmt.Printf("%v:%v\t", string(k), v)
 	}
 }
