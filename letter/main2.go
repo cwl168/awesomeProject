@@ -85,10 +85,8 @@ func ConcurrentFrequency2(s []string) FreqMap {
 	wg.Wait()
 	close(channel)
 
-	for range s {
-		for k, v := range <-channel {
-			result[k] += v
-		}
+	for k, v := range <-channel {
+		result[k] += v
 	}
 
 	return result
@@ -115,10 +113,36 @@ func ConcurrentFrequency1(s []string) FreqMap {
 		close(channel)
 	}()
 	//channel 为buffer channel,所以会出现 channel关闭后，for range 还在循环从channe读取数据，但是channel数据长度肯定是 小于等于 len(s)
-	for range s {
-		for k, v := range <-channel {
-			result[k] += v
-		}
+	for k, v := range <-channel {
+		result[k] += v
+	}
+	return result
+}
+
+func ConcurrentFrequency6(s []string) FreqMap {
+	var wg sync.WaitGroup
+	wg.Add(len(s))
+	var (
+		result  = FreqMap{}
+		channel = make(chan FreqMap)
+	)
+
+	for _, v := range s {
+		go func(text string) {
+			defer wg.Done()
+			channel <- Frequency(text)
+		}(v)
+	}
+	go func() {
+		wg.Wait()
+		close(channel)
+		fmt.Println("close")
+	}()
+
+	for k, v := range <-channel {
+		result[k] += v
+
+		fmt.Println("done")
 	}
 
 	return result
@@ -209,6 +233,12 @@ O'er the land of the free and the home of the brave?`
 	_ = ConcurrentFrequency5([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
 	cost5 := time.Since(start5)
 	fmt.Printf("ConcurrentFrequency5 cost=[%s]\n", cost5)
+
+	//方法6
+	start6 := time.Now()
+	_ = ConcurrentFrequency6([]string{euro, dutch, us, dutch, us, euro, euro, euro, euro, dutch, us, dutch, euro, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, us, dutch, dutch, us, dutch, euro, dutch, us, dutch, euro, dutch, us, dutch})
+	cost6 := time.Since(start6)
+	fmt.Printf("ConcurrentFrequency6 cost=[%s]\n", cost6)
 
 	for k, v := range ret {
 		fmt.Printf("%v:%v\t", string(k), v)
