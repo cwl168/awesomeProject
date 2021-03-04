@@ -21,6 +21,7 @@ func Frequency(s string) FreqMap {
 // 我们可以用一个有容量限制的buffered channel来控制并发，这类似于操作系统里的计数信号量概念。
 var sema = make(chan struct{}, 10)
 
+//限制并发
 func ConcurrentFrequency4(s []string) FreqMap {
 	var (
 		result  = FreqMap{}
@@ -83,12 +84,12 @@ func ConcurrentFrequency2(s []string) FreqMap {
 		}(v)
 	}
 	wg.Wait()
-	//close(channel)
-	for range s {
-		for k, v := range <-channel {
-			result[k] += v
-		}
+	close(channel)
+	//for range s {
+	for k, v := range <-channel {
+		result[k] += v
 	}
+	//}
 
 	return result
 }
@@ -246,7 +247,21 @@ O'er the land of the free and the home of the brave?`
 	}
 	fmt.Println()
 	fmt.Println()
+
 	for k, v := range ret2 {
 		fmt.Printf("%v:%v\t", string(k), v)
 	}
 }
+
+/*func FormatPrint(ret FreqMap )  {
+	fmt.Println()
+	var keys []int32
+	for k := range ret {
+		keys = append(keys, k)
+	}
+	sort.Ints(keys)
+	for k, v := range ret {
+		fmt.Printf("%v:%v\t", string(k), v)
+	}
+	fmt.Println()
+}*/
