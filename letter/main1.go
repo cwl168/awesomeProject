@@ -26,12 +26,18 @@ func ConcurrentFrequency(s []string) FreqMap {
 			channel <- Frequency(text)
 		}(v)
 	}
-
+	//遍历map，取值，非遍历通道吧
 	for range s {
 		for k, v := range <-channel {
 			result[k] += v
 		}
 	}
+
+	/*for f := range channel {
+		for k, v := range f {
+			result[k] += v
+		}
+	}*/
 
 	return result
 }

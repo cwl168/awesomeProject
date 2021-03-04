@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 	"sync"
 	"time"
@@ -143,15 +144,12 @@ func ConcurrentFrequency6(s []string) FreqMap {
 	go func() {
 		wg.Wait()
 		close(channel)
-		fmt.Println("close channel")
 	}()
 
 	for range s {
-		//遍历map，取值，以下非遍历通道
 		for k, v := range <-channel {
 			result[k] += v
 		}
-		fmt.Println("done")
 	}
 
 	return result
