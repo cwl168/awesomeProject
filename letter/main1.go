@@ -26,7 +26,7 @@ func ConcurrentFrequency(s []string) FreqMap {
 			channel <- Frequency(text)
 		}(v)
 	}
-	//遍历map，取值，非遍历通道吧
+	//遍历map，取值，非遍历通道 for range s 控制数量
 	for range s {
 		for k, v := range <-channel {
 			result[k] += v
