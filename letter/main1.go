@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"runtime"
+	"sort"
 	"time"
 )
 
@@ -27,8 +28,16 @@ func ConcurrentFrequency(s []string) FreqMap {
 		}(v)
 	}
 	//遍历map，取值，非遍历通道 for range s 控制数量
-	for range s {
+	/*for range s {
 		for k, v := range <-channel {
+			result[k] += v
+		}
+	}*/
+
+	//这样写更容易理解
+	for range s {
+		data := <-channel
+		for k, v := range data {
 			result[k] += v
 		}
 	}
@@ -76,4 +85,13 @@ O'er the land of the free and the home of the brave?`
 	)
 	con := ConcurrentFrequency([]string{euro, dutch, us})
 	fmt.Println(con)
+	var keys []int
+	for k := range con {
+		keys = append(keys, int(k))
+	}
+	sort.Ints(keys)
+	for _, k := range keys {
+		fmt.Println("Key:", k, "Value:", con[rune(k)])
+	}
+
 }
