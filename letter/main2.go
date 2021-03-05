@@ -117,7 +117,7 @@ func ConcurrentFrequency1(s []string) FreqMap {
 	}()
 	//channel 为buffer channel,所以会出现 channel关闭后，for range 还在循环从channe读取数据，但是channel数据长度肯定是 小于等于 len(s)
 
-	//channel close后，发送数据将会触发 panic 异常，还能接受channel中的数据，等channel中的数据为空，返回nil, 接受就会停止了
+	//channel close后，发送数据将会触发 panic 异常，还能接受channel中的数据，等channel中的数据为空，返回nil, 接受就会停止了（range能够感知channel的关闭，当channel被发送数据的协程关闭时，range就会结束，接着退出for循环。）
 	//channel 没有close的话，如果channel没数据的话，接受只会阻塞，等待着发送者发送数据,如果数据满了，发送数据端将阻塞等待接收
 	for f := range channel {
 		for k, v := range f {
