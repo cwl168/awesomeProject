@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
+	"learnDemo/go-in-action/chapter7/patterns/runner"
 	"log"
 	"os"
 	"time"
-	"learnDemo/go-in-action/chapter7/patterns/runner"
 )
 
 const timeout = 3 * time.Second
 
-func main()  {
+func main() {
 	fmt.Println("开始运行...")
 
 	// 初始化作业运行器
