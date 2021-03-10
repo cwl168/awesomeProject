@@ -7,6 +7,7 @@ type fileError struct {
 }
 
 func (fe *fileError) Error() string {
+	fmt.Println()
 	return fe.s + "3333"
 }
 
