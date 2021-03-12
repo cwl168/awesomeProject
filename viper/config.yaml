@@ -3,7 +3,7 @@ Address: "Shenzhen"
 Postcode: 51804
 CompanyInfomation:
   Name: "Sunny"
-  MarketCapitalization: 50000
+  MarketCapitalization: 500000
   EmployeeNum: 500
   Department:
     - "Finance"
