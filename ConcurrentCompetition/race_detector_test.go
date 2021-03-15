@@ -20,3 +20,9 @@ func TestRaceDetector2(t *testing.T) {
 	fmt.Println()
 	race_detector3()
 }
+func TestMapHandle(t *testing.T) {
+	MapHandle()
+}
+func TestSliceHandle(t *testing.T) {
+	SliceHandle()
+}

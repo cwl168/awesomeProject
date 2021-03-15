@@ -2,6 +2,7 @@ package ConcurrentCompetition
 
 import (
 	"fmt"
+	"sort"
 	"sync"
 )
 
@@ -144,5 +145,43 @@ func sysncMap() {
 
 	//遍历
 	class.Students.Range(handler)
+
+}
+
+//map并发不安全
+func MapHandle() {
+	m := make(map[int]int)
+	go func() { //开一个协程写map
+		for i := 0; i < 10000; i++ {
+			m[i] = i
+		}
+	}()
+
+	go func() { //开一个协程读map
+		for i := 0; i < 10000; i++ {
+			fmt.Println(m[i])
+		}
+	}()
+	select {}
+
+}
+
+//var lock sync.Mutex
+//切片并发不安全
+func SliceHandle() {
+	var s []int
+
+	for i := 0; i < 10000; i++ { //10000个协程同时添加切片
+		go func(i int) {
+			//lock.Lock()
+			s = append(s, i)
+			//lock.Unlock()
+		}(i)
+	}
+
+	sort.Ints(s)
+	for i, v := range s { //同时打印索引和值
+		fmt.Println(i, ":", v)
+	}
 
 }
