@@ -2,8 +2,10 @@ package ConcurrentCompetition
 
 import (
 	"fmt"
+	"runtime"
 	"sort"
 	"sync"
+	"time"
 )
 
 func race_detector() {
@@ -166,22 +168,27 @@ func MapHandle() {
 
 }
 
-//var lock sync.Mutex
+var lock sync.Mutex
+
 //切片并发不安全
 func SliceHandle() {
-	var s []int
+	defer func() {
+		time.Sleep(4 * time.Second)
+		fmt.Printf("final goroutine num:%d\n", runtime.NumGoroutine())
+	}()
+	var s []int //打印索引和值出现不等buyao
 
 	for i := 0; i < 10000; i++ { //10000个协程同时添加切片
 		go func(i int) {
-			//lock.Lock()
+			lock.Lock()
 			s = append(s, i)
-			//lock.Unlock()
+			lock.Unlock()
 		}(i)
 	}
-
+	time.Sleep(1 * time.Second)
 	sort.Ints(s)
+	fmt.Printf("slice length:%d\n", len(s))
 	for i, v := range s { //同时打印索引和值
 		fmt.Println(i, ":", v)
 	}
-
 }

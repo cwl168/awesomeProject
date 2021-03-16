@@ -2,6 +2,7 @@ package ConcurrentCompetition
 
 import (
 	"fmt"
+	"github.com/fortytw2/leaktest"
 	"testing"
 )
 
@@ -24,5 +25,6 @@ func TestMapHandle(t *testing.T) {
 	MapHandle()
 }
 func TestSliceHandle(t *testing.T) {
+	defer leaktest.Check(t)()
 	SliceHandle()
 }
