@@ -20,7 +20,18 @@ func main() {
 	for _, val := range slice {
 		val()
 	}
-	//a, b := 3, 2
+
+	/*a, b := 3, 2
+	c := a / b
+	if a%b > 0 {
+		c += 1
+	}
+	fmt.Println(c)
+	fmt.Println((a + b - 1) / b)*/
+
+	a, b := float64(3), float64(2)
+	fmt.Printf("%v,%T\n", a/b, a/b)
 	c := 1.2
-	fmt.Println(math.Ceil(c))
+	d := math.Ceil(c)
+	fmt.Printf("%v,%T\n", d, d)
 }
