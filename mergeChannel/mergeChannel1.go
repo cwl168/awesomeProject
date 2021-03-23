@@ -14,7 +14,7 @@ func main() {
 	b := asChan(10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
 	c := asChan(20, 21, 22, 23, 24, 25, 26, 27, 28, 29)
 	//当channel被发送数据的协程关闭时，range就会结束，接着退出for循环
-	for v := range mergeReflect(a, b, c) {
+	for v := range mergeRec(a, b, c) {
 		fmt.Println(v)
 	}
 }
@@ -70,8 +70,10 @@ func merge3(cs ...<-chan int) <-chan int {
 	return out
 }
 
-//way one
+//way one  goroutine
+//chan作为函数返回值的方式有3种:（chan int）、（<- chan int）、（chan <- int），分别代表（可读可写的管道）、（只读管道）、（只写管道），只读管道不能close()，只写管道可以close()
 func merge(cs ...<-chan int) <-chan int {
+	fmt.Printf("%T\n", cs)
 	out := make(chan int)
 	var wg sync.WaitGroup
 	wg.Add(len(cs))
@@ -90,7 +92,7 @@ func merge(cs ...<-chan int) <-chan int {
 	return out
 }
 
-//way two
+//way two 反射+goroutine
 func mergeReflect(chans ...<-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
@@ -116,20 +118,23 @@ func mergeReflect(chans ...<-chan int) <-chan int {
 
 }
 
-// way three
+// way three  递归+goroutine
 func mergeRec(chans ...<-chan int) <-chan int {
+	// chans 类型为[]<-chan int
+	fmt.Printf("len:%d\n", len(chans))
 	switch len(chans) {
 	case 0:
 		c := make(chan int)
-		close(c)
+		close(c) //channel 没有close的话，如果channel没数据的话，接受只会阻塞,造成 for range deadlock
 		return c
 	case 1:
+		//chans[0] 为 <-chan int  类型
 		return chans[0]
 	default:
 		m := len(chans) / 2
-		return mergeTwo(
-			mergeRec(chans[:m]...),
-			mergeRec(chans[m:]...))
+		a := mergeRec(chans[:m]...)
+		b := mergeRec(chans[m:]...)
+		return mergeTwo(a, b)
 	}
 }
 
@@ -159,6 +164,7 @@ func mergeTwo(a, b <-chan int) <-chan int {
 }
 
 func asChan(vs ...int) <-chan int {
+	//vs为切片类型
 	c := make(chan int)
 	go func() {
 		for _, v := range vs {
