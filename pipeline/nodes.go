@@ -29,7 +29,8 @@ func ArraySource(a ...int) <-chan int {
 }
 
 func InMemSort(in <-chan int) <-chan int {
-	out := make(chan int)
+	//定义为缓冲通道，非无缓存通道，不用阻塞等待，提高了管道处理的效率
+	out := make(chan int, 1024)
 	go func() {
 		//读入内存
 		a := []int{}
@@ -52,7 +53,7 @@ func Merge(in1, in2 <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
 		// 归并的过程中要处理某个通道中可能没有数据的情况
-		v1, ok1 := <-in1  //会等待
+		v1, ok1 := <-in1 //会等待
 		v2, ok2 := <-in2
 		for ok1 || ok2 {
 			//fmt.Printf("v1 %s,v2 %s",v1,v2)
@@ -65,12 +66,12 @@ func Merge(in1, in2 <-chan int) <-chan int {
 			}
 		}
 		close(out)
-		fmt.Println("Merge done:", time.Now().Sub(startTime))
+		fmt.Println("Merge done:", time.Now().Sub(startTime)) //merge是同时进行，合并的次数
 	}()
 	return out
 }
 
-//chunkSize 分块读取,值为-1表示全部读取文件
+//chunkSize 分块读取,值为-1表示全部读取文件 将reader改为分块读取, 每次读取指定字符长度
 func ReaderSource(reader io.Reader, chunkSize int) <-chan int {
 	out := make(chan int, 1024)
 	go func() {
@@ -109,6 +110,7 @@ func RandomSource(count int) <-chan int {
 	}()
 	return out
 }
+
 //递归归并
 func MergeN(inputs ...<-chan int) <-chan int {
 	if len(inputs) == 1 {
@@ -119,5 +121,5 @@ func MergeN(inputs ...<-chan int) <-chan int {
 	return Merge(
 		MergeN(inputs[:m]...),
 		MergeN(inputs[m:]...),
-		)
+	)
 }

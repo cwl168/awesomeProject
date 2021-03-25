@@ -16,4 +16,5 @@ func TestMergeSort1(t *testing.T) {
 func TestMergeSort2(t *testing.T) {
 	defer leaktest.Check(t)()
 	mergeSort2()
+	Gen()
 }

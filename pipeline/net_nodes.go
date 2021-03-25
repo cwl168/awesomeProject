@@ -5,6 +5,7 @@ import (
 	"net"
 )
 
+//开启服务端 ，等待客户端连接
 func NetworkSink(addr string, in <-chan int) {
 	//监听端口
 	listen, err := net.Listen("tcp", addr)
@@ -26,6 +27,7 @@ func NetworkSink(addr string, in <-chan int) {
 	}()
 }
 
+//客户端连接
 func NetworkSource(addr string) <-chan int {
 	out := make(chan int)
 	go func() {
