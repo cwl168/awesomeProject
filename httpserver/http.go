@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"sync"
 )
@@ -25,8 +26,8 @@ func main() {
 				return
 			}
 			defer resp.Body.Close()
-			//body, _ := ioutil.ReadAll(resp.Body)
-			//fmt.Println("resp:", string(body))
+			body, _ := ioutil.ReadAll(resp.Body)
+			fmt.Println("resp:", string(body))
 		}()
 		//time.Sleep(time.Millisecond*10)
 	}
