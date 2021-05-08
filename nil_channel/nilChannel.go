@@ -48,6 +48,7 @@ func merge(a, b <-chan int) <-chan int {
 		adone, bdone := false, false
 		for !adone || !bdone {
 			select {
+			//b未关闭(bdone false)，a关闭(adone true)，程序一直输出 a is done
 			case v, ok := <-a:
 				if !ok {
 					log.Println("a is done")
@@ -56,6 +57,7 @@ func merge(a, b <-chan int) <-chan int {
 				}
 				log.Printf("add from a %d\n", v)
 				c <- v
+
 			case v, ok := <-b:
 				if !ok {
 					log.Println("b is done")
@@ -75,6 +77,7 @@ func merge2(a, b <-chan int) <-chan int {
 		defer close(c)
 		for a != nil || b != nil {
 			select {
+			//b未关闭(b != nil)，a关闭(a = nil),<-a 阻塞
 			case v, ok := <-a:
 				if !ok {
 					log.Println("a is done")
