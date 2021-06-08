@@ -11,7 +11,7 @@ import (
 
 // main is the entry point for the application.
 func main() {
-	var b bytes.Buffer
+	var b bytes.Buffer // 实现了io.writer 和 io.reader 接口
 
 	// Write a string to the buffer.
 	b.Write([]byte("Hello"))

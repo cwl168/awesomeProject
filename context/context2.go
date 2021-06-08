@@ -3,11 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"runtime"
 	"time"
 )
 
 //Context控制多个goroutine
 func main() {
+	defer func() {
+		fmt.Printf("goroutiue num %d\n", runtime.NumGoroutine())
+	}()
 	ctx, cancel := context.WithCancel(context.Background())
 	go watch(ctx, "【监控1】")
 	go watch(ctx, "【监控2】")

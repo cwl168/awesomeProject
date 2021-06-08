@@ -10,6 +10,9 @@ import (
 )
 
 func main() {
+	//返回一个Group 实例，同时还会返回一个使用 context.WithCancel生成的新Context
+
+	//想让程序遇到错误就终止其他子任务
 	eg, ctx := errgroup.WithContext(context.Background())
 
 	for i := 0; i < 100; i++ {

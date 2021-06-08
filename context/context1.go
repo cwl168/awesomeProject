@@ -3,10 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
+	"runtime"
 	"time"
 )
 
 func main() {
+	defer func() {
+		fmt.Printf("goroutiue num %d\n", runtime.NumGoroutine())
+	}()
 	ctx, cancel := context.WithCancel(context.Background())
 	go func(ctx context.Context) {
 		for {

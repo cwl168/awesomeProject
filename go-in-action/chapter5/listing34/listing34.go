@@ -27,7 +27,7 @@ func main() {
 	}
 
 	// Copies from the Body to Stdout.
-	io.Copy(os.Stdout, r.Body)
+	io.Copy(os.Stdout, r.Body) //os.Stdout 表示标准输出设备
 	if err := r.Body.Close(); err != nil {
 		fmt.Println(err)
 	}

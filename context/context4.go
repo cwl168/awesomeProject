@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -22,8 +23,12 @@ func Get(ctx context.Context) string {
 }
 
 func main() {
+	defer func() {
+		fmt.Printf("goroutiue num %d\n", runtime.NumGoroutine())
+	}()
 	rand.Seed(time.Now().Unix())
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	//ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
 	go func() {
 		os.Stdin.Read(make([]byte, 1))

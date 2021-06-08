@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-var m = make(map[string]int)
+var m = make(map[string]interface{})
 
 //将slice转化为字符串作为map的key
 func k(list []string) string { return fmt.Sprintf("%q", list) }
@@ -28,6 +28,7 @@ func main() {
 	fmt.Println(m)
 	fmt.Println(Count([]string{"1", "2", "3"}))
 
+	fmt.Println(len(m))
 	for k, v := range m {
 		fmt.Println(k, v)
 	}

@@ -41,8 +41,13 @@ func GetName() {
 	fmt.Println(t1.get_name())
 
 	//多态
-	var si Si
-	si = T1{}
-	si = T2{}
-	fmt.Println(si.inter())
+	var s1 T1
+	var s2 T2
+	Duotai(s1)
+	Duotai(s2)
+
+}
+
+func Duotai(s Si) {
+	fmt.Println(s.inter())
 }

@@ -3,12 +3,17 @@ package main
 import (
 	"fmt"
 	"log"
+	"runtime"
 	"time"
 
 	"golang.org/x/sync/errgroup"
 )
 
 func main() {
+	defer func() {
+		fmt.Println("the number of goroutines: ", runtime.NumGoroutine())
+	}()
+
 	var eg errgroup.Group
 	for i := 0; i < 100; i++ {
 		i := i
